@@ -1,0 +1,232 @@
+Build and refine a luxury, state-of-the-art Scandinavian website redesign for "Natalie Lopez - Indretningsarkitekt & Boligstylist" (natalielopez.dk) using Next.js 14+ (App Router), Tailwind CSS, GSAP (ScrollTrigger), Lenis Smooth Scroll, and Framer Motion.
+
+Maintain the warm Scandinavian stone canvas (`rgb(238, 237, 231)` / `#EEEDE7`), deep obsidian ink (`#120F17`), and fluid 60fps micro-interactions while implementing all UI, Awwwards-grade navigation & language switch animations, enlarged logo sizing, high-resolution stock imagery, Showroom visual integration, restored ImgBB carousel assets, `AnimatedContent`, `LogoLoop`, interactive card hover, and responsive specifications below.
+
+---
+
+### 1. CINEMATIC ENTRY PRELOADER & PAGE TRANSITIONS
+
+1. **Initial Black Screen & Shorter Architectural Arch Mirror:**
+   - Starts on pitch-black (`#000000`) with a centered architectural arch mirror SVG (`viewBox="0 0 320 430"`, balanced ~1:1.35 proportion, flat bottom, semicircular top arch).
+   - Crisp white SVG outline (`stroke-width: 1.5px`) traces from 0% to 100% via `stroke-dashoffset`.
+2. **Bold Sliding Number Counter:**
+   - Fixed at bottom-left (`fixed bottom-8 left-8 md:bottom-12 md:left-12`) using `@animate-ui/react/primitives/texts/sliding-number`.
+   - Styled with a strong, crisp **bold** geometric sans-serif / grotesk font with tabular figures (`font-sans font-bold tabular-nums tracking-tight text-4xl md:text-5xl text-white`), counting smoothly from `00` to `100`.
+3. **Fill, Viewport Expansion & Netflix-Style Logo Flight:**
+   - At 100%, the counter fades out (`opacity: 0`), the arch mirror fills with solid `rgb(238, 237, 231)`, and expands seamlessly to `100vw` × `100vh`.
+   - Logo Asset: `https://natalielopez.dk/wp-content/uploads/2026/08/459201499_872852584379790_838935452870768594_n-removebg-preview.png`
+   - Appears dead-center with soft zoom deceleration, pauses 0.4s, then glides smoothly into its permanent top-left header position (`top: 1rem; left: 1.25rem;` on mobile, `top: 1.25rem; left: 3.5rem;` on desktop), landing at its full enlarged, clearly readable header dimensions.
+4. **Navigation Transitions:**
+   - Same-page links scroll smoothly via Lenis.
+   - Route changes play the mirror animation in reverse to black, switch routes, and expand forward again.
+
+---
+
+### 2. HEADER: PROMINENT READABLE LOGO, SCROLL-TRIGGERED GRADUAL BLUR & AWWWARDS LANGUAGE TOGGLE
+
+1. **Enlarged, Sharp & Clearly Visible Logo:**
+   - Size the Natalie Lopez logo so both the architectural house mark and the "NATALIE LOPEZ" typography are crisp, prominent, and effortlessly readable on mobile and desktop:
+     - **Mobile Logo:** `h-14 sm:h-16 w-auto object-contain` (`56px–64px` height) with `image-rendering: -webkit-optimize-contrast`.
+     - **Desktop Logo:** `md:h-20 lg:h-24 w-auto object-contain` (`80px–96px` height).
+   - Header container: `fixed top-0 left-0 w-full z-50 px-5 sm:px-8 md:px-14 py-3 md:py-4 flex items-center justify-between`.
+   - **No Center Links:** Keep the center of the navbar completely empty.
+
+2. **Scroll-Activated Top `GradualBlur` (Hidden at Top of Hero):**
+   - Keep the top `GradualBlur` overlay completely invisible (`opacity: 0; pointer-events: none;`) when the user first enters the website (`scrollY === 0`) so the top edge of the hero video is 100% crystal clear.
+   - Once the user scrolls past 45% of the Hero section (`scrollY > window.innerHeight * 0.45`), smoothly fade in the `@react-bits/GradualBlur` top overlay (`transition-opacity duration-500 ease-out opacity-100`, `position="top"`, `height="7rem"`, `tint="rgba(238, 237, 231, 0.55)"`, `layers={8}`).
+
+3. **Awwwards-Style Instant Bilingual Language Toggle (`DA` / `EN`):**
+   - Sleek, compact glass/outline pill (`h-8 sm:h-9 px-1 rounded-full border border-[#120F17]/20 bg-white/35 backdrop-blur-md flex items-center relative text-[11px] font-mono tracking-wider`) on the right side next to the menu trigger.
+   - High-velocity spring-loaded active indicator (`layoutId="lang-pill"` in Framer Motion, `transition={{ type: "spring", stiffness: 520, damping: 34 }}`) with tactile tap feedback (`whileTap={{ scale: 0.94 }}`).
+   - **Instant Text Swap + Kinetic Snap Animation:** When toggling between `DA` and `EN`, the text content updates **immediately** (0ms delay, never a slow gradual crossfade) accompanied by an instantaneous, razor-sharp Awwwards-style kinetic vertical settle (`key={lang}`, `initial={{ y: 7, opacity: 0.65 }}`, `animate={{ y: 0, opacity: 1 }}`, `transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}`) on translated text blocks, preserving 100% identical layout alignment and zero layout shift.
+
+---
+
+### 3. AWWWARDS-INSPIRED FULLSCREEN NAVIGATION OVERLAY (NO NUMBERS, NO SCROLLBAR, EDGE FADES)
+
+1. **3-Line Rolling Menu Trigger (Top-Right):**
+   - Vertically centered (`h-8 sm:h-9 flex items-center gap-2.5 sm:gap-3 cursor-pointer z-[70]`).
+   - Rolling text (`MENU` rolls up on hover to reveal `LUK OP` in Danish or `OPEN` in English) paired with 3 crisp horizontal lines (`w-6 sm:w-7 h-[1.5px] bg-[#120F17]`) that smoothly morph into an `X` when active.
+2. **Curated Unnumbered Menu Links (No `01.`, `02.`):**
+   - Display clean, architectural uppercase serif typography (`font-serif font-light text-4xl sm:text-5xl md:text-6xl lg:text-[64px] tracking-tight leading-[1.15]`):
+     - **DA:** `YDELSER`, `PROCES`, `LEVERANDØRER`, `UDVALGTE SAGER`, `OM NATALIE`, `REVIEWS`, `BOOK SAMTALE`
+     - **EN:** `SERVICES`, `PROCESS`, `SUPPLIERS`, `SELECTED WORKS`, `ABOUT NATALIE`, `REVIEWS`, `BOOK CONSULTATION`
+3. **Smooth Architectural Curtain Opening & Upward Float Closing:**
+   - Fullscreen warm stone overlay (`fixed inset-0 z-[60] bg-[#EEEDE7]`) sweeps upward (`clipPath: "inset(100% 0% 0% 0%)"` → `"inset(0% 0% 0% 0%)"`, `duration: 0.75`, `ease: [0.76, 0, 0.24, 1]`).
+   - Staggered baseline float-up links on open (`y: "115%"` → `"0%"`), and smooth upward float exit (`y: "-110%"`) when clicking any link or closing, while Lenis scrolls smoothly to the target section.
+4. **Hidden Scrollbar + Top & Bottom Edge Fade Effect:**
+   - Vertical scrolling enabled (`overflow-y-auto h-full pt-32 pb-28 px-6 sm:px-12 md:px-20`) with scrollbar completely hidden (`[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]`) and smooth top/bottom gradient fade masks (`linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)`).
+   - Dual-layer rolling upright-to-italic serif hover animation + sibling link dimming.
+
+---
+
+### 4. FULL-BLEED HERO SECTION & COMPACT LIQUID GLASS PILL
+
+1. **Edge-to-Edge Video & Seamless Bottom Gradient Dissolve (No Divider Line):**
+   - Fullscreen background video (`w-full h-screen min-h-[680px] object-cover scale-105 pointer-events-none`) playing:
+     `https://natalielopez.dk/wp-content/uploads/2026/10/WhatsApp-Video-2026-10-05-at-11.09.26-AM.mp4` (`autoPlay loop muted playsInline`).
+   - Subtle ambient scrim (`bg-black/20`) + tall bottom gradient fade (`h-44 md:h-56 w-full absolute bottom-0 left-0 pointer-events-none z-10`, `linear-gradient(to top, #EEEDE7 0%, rgba(238, 237, 231, 0.8) 35%, rgba(238, 237, 231, 0) 100%)`) merging seamlessly into `#EEEDE7` with **no `<hr>` or border divider**.
+
+2. **Bottom-Left Headline & CTA (Unselectable & Balanced):**
+   - Headline positioned above the CTA button with `select-none`:
+     - **DA:** `Når æstetik og byggeri skal hænge ` `<span className="italic font-serif font-normal">sammen</span>`
+     - **EN:** `Where aesthetics and construction come ` `<span className="italic font-serif font-normal">together</span>`
+   - Refined sizing (`text-2xl sm:text-3xl md:text-[34px] font-light leading-[1.2] tracking-tight text-white drop-shadow-sm max-w-md`).
+   - Single primary CTA button below (`mt-5`): `Book en samtale ↗` (DA) / `Book a consultation ↗` (EN) styled as a white magnetic pill (`px-7 py-3.5 rounded-full bg-white text-[#120F17] text-sm font-medium`) with upward `#120F17` fill hover animation.
+
+3. **Bottom-Right Compact Liquid Glass Pill (`GlassSurface` — 3 High-Quality Avatars):**
+   - Dimensions: `width={260}` (`245` on mobile, `270` on desktop), `height={56}`, `borderRadius={28}`.
+   - Compact inner content (`px-3 py-1.5 flex items-center gap-2.5`):
+     - 3 crisp, high-resolution circular client portrait avatars (`h-7 w-7 rounded-full object-cover ring-1 ring-white/40`, `-space-x-2`, `referrerPolicy="no-referrer"`):
+       - `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=85`
+       - `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&auto=format&fit=crop&q=85`
+       - `https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&auto=format&fit=crop&q=85`
+     - Tight, refined text: `150+ Hjem` (`text-xs font-semibold text-white leading-tight`) + `Gennemført med omtanke` (`text-[10px] text-white/75 leading-tight font-light`) — or `150+ Homes` / `Crafted with care` in `EN`.
+
+---
+
+### 5. SUB-HERO SCROLL-FILL STATEMENT SECTION (LARGER TYPOGRAPHY + COMPLETE VIEWPORT FILL)
+
+- Generously spaced single-column statement section (`py-28 sm:py-36 md:py-44 px-6 md:px-14 bg-[#EEEDE7] border-none`) containing **only** the core statement paragraph:
+  `max-w-5xl mx-auto text-3xl sm:text-4xl md:text-[50px] lg:text-[58px] font-light leading-[1.22] tracking-tight`
+  - **DA:** `En renovering består af hundredevis af beslutninger. Jeg hjælper dig med at skabe overblik, træffe de rigtige valg og sikre, at visionen bevares hele vejen fra idé til færdigt hjem.`
+  - **EN:** `A renovation consists of hundreds of decisions. I help you create clarity, make the right choices, and ensure your vision is preserved all the way from idea to finished home.`
+- **GSAP ScrollTrigger Word-by-Word Fill:** Every word starts at `rgba(18, 15, 23, 0.18)` and transitions sequentially to solid `#120F17` (`scrub: 0.35`, `start: "top 80%"`, `end: "center 45%"`), wrapped in non-breaking word spans (`inline-block whitespace-nowrap`) so 100% of the paragraph finishes filling while centered in the viewport.
+
+---
+
+### 6. GLOBAL SCROLL ANIMATIONS (`AnimatedContent` + BASELINE HEADING REVEALS)
+
+1. **Create & Integrate React Bits `AnimatedContent` (`components/ui/AnimatedContent.jsx`):**
+   - Implement the GSAP `ScrollTrigger`-powered `AnimatedContent` component supporting `distance`, `direction`, `reverse`, `duration`, `ease`, `initialOpacity`, `animateOpacity`, `scale`, `blur`, `rotate`, `tilt`, `wipe`, `threshold`, `delay`, `stagger`, `staggerFrom`, `trigger`, `once`, `scrub`, and `prefers-reduced-motion`, wrapping cards, process steps, showroom details, and review cards across the site.
+2. **Signature Baseline Float & Blur-to-Reveal for Headings:**
+   - Wrap every major section heading and eyebrow inside an `overflow-hidden` mask container (`initial={{ y: "115%", opacity: 0, filter: "blur(10px)" }}`, `animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}`, `transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}`), keeping `DA` and `EN` alignment identical.
+
+---
+
+### 7. "YDELSER / SERVICES" SECTION: 3 HIGH-QUALITY STOCK IMAGES + FLUENT EDGE GLOW + MILD 3D FLOAT
+
+In the **Ydelser / Services** 3-card grid directly below the scroll-fill statement paragraph, render 3 luxury architectural service cards:
+
+1. **High-Resolution Curated Scandinavian Interior Stock Imagery inside Each Card:**
+   - Include a sleek architectural aspect-ratio image frame (`aspect-[16/10] w-full rounded-xl overflow-hidden mb-6 bg-[#E3E1D9]`) at the top of each of the 3 cards (with subtle `group-hover:scale-105 transition-transform duration-700 ease-out` and `referrerPolicy="no-referrer"`):
+     - **Card 01 (`Renovering` / `Renovation`):**
+       `https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=85`
+     - **Card 02 (`Æstetisk rådgivning` / `Aesthetic Advisory`):**
+       `https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&auto=format&fit=crop&q=85`
+     - **Card 03 (`Sparring` / `Design Sparring`):**
+       `https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&auto=format&fit=crop&q=85`
+2. **Windows Fluent Reveal — Cursor-Tracking Edge-Only Glow:**
+   - Track mouse coordinates (`--mouse-x`, `--mouse-y`) across the cards container and render a `1.5px` border-only spotlight mask (`mask-composite: exclude`) that softly illuminates card borders along the perimeter as the cursor moves nearby without flooding the card interior.
+3. **Subtle 3D Spotify Album-Art Tilt & Gentle Hover Float:**
+   - Apply a mild, tactile 3D perspective tilt (`perspective: 1000px`, strictly capped at `max ±3.5deg` on `rotateX`/`rotateY` with a subtle `translateY(-4px)` and `scale(1.01)` lift on hover, smoothly springing back on leave).
+
+---
+
+### 8. UDVALGTE SAGER (RESTORED IMGBB CAROUSEL + AUTOMATIC CAPTION & LIGHTBOX SCENE)
+
+1. **Single-Viewport Fit (`100svh` Layout — No Clipped Heading on Desktop or Mobile):**
+   - Viewport-fitted flex column (`w-full h-[100svh] min-h-[620px] max-h-[100svh] pt-24 md:pt-28 pb-8 md:pb-12 flex flex-col justify-between items-center overflow-hidden bg-[#EEEDE7]`).
+   - Compact centered header (`shrink-0 mb-3 md:mb-5 px-4 text-center`): Eyebrow (`UDVALGTE SAGER` / `SELECTED WORKS`) + Main Title (`Fra rum til helhed` / `From space to whole`, `text-3xl sm:text-4xl md:text-5xl` with baseline float-up reveal) + 1px divider rule.
+2. **Responsive `FlexCarousel` Container, Props & ImgBB Hotlink Reliability:**
+   - Render all `<img>` tags inside `FlexCarousel` and the Lightbox with `referrerPolicy="no-referrer"` and `loading="eager"`.
+   - Desktop (`>= 768px`): `cardHeight={0.56}`, `gap={12}`, `squeeze={0.18}`, `lensWidth={0.74}`, `lensHeight={1.12}`, `tilt={58}`, `bend={0.32}`, `reach={0.36}`, `captions`, `focusOnClick`.
+   - Mobile (`< 768px`): `cardHeight={0.66}`, `gap={10}`, `squeeze={0.04}`, `lensWidth={1.12}`, `lensHeight={1.02}`, `tilt={22}`, `bend={0.16}`, `reach={0.24}`, `captions`, `focusOnClick`.
+3. **Restored Fresh ImgBB Project Images & Automatic Project Text Scene:**
+   - `https://i.ibb.co/5gMSmTg6/IMG-0947-1024x683-jpg.jpg` — `TOTAL RENOVERING` · `Islands Brygge` (`Komplet arkitektonisk ombygning, specialsnedkererede løsninger og gennemgående materialevalg.`)
+   - `https://i.ibb.co/27Rd2gk3/IMG-0942-1024x683-jpg.jpg` — `TOTAL RENOVERING` · `Skodsborg` (`Harmonisk sammenhæng mellem lysindfald, natursten og varme træsorter langs kysten.`)
+   - `https://i.ibb.co/mrMbG6gh/IMG-0943-1-1024x683-jpg.jpg` — `TOTAL RENOVERING` · `Østerbro` (`Klassisk herskabslejlighed nyfortolket med respekt for originale detaljer og moderne komfort.`)
+   - `https://i.ibb.co/tTxQgFMC/Whats-App-Image-2026-09-21-at-11-30-10-AM.jpg` — `TOTAL RENOVERING` · `Islands Brygge II` (`Skræddersyet planløsning og æstetisk rød tråd fra entré til stue og køkkenalrum.`)
+   - `https://i.ibb.co/5Xmtpgx9/Whats-App-Image-2026-09-21-at-11-33-52-AM.jpg` — `TOTALINDRETNING` · `Hellerup` (`Helhedsorienteret indretning med specialdesignede møbler, tekstiler og afstemt belysning.`)
+   - `https://i.ibb.co/tTt94XWh/Whats-App-Image-2026-09-21-at-11-34-02-AM.jpg` — `ÆSTETISK RÅDGIVNING` · `København K` (`Farvesætning, materialekombinationer og sparring gennem hele byggeprocessen.`)
+   - `https://i.ibb.co/Hfvk7kM1/Whats-App-Image-2026-09-21-at-11-35-50-AM.jpg` — `BOLIGSTYLING` · `Klampenborg` (`Kuraterede overflader, gardiner og taktile elementer der binder rummene sammen.`)
+   - `https://i.ibb.co/0RTXHZwm/Whats-App-Image-2026-09-21-at-11-35-59-AM.jpg` — `TOTAL RENOVERING` · `Strandvejen` (`Eksklusiv villa-renovering med fokus på ro, rene linjer og tidløst håndværk.`)
+   - `https://i.ibb.co/LDykTmHv/Whats-App-Image-2026-09-21-at-11-36-37-AM.jpg` — `MATERIALER & DETALJER` · `Showroom` (`Sammensætning af natursten, messingarmaturer og snedkerdetaljer.`)
+   - `https://i.ibb.co/YTk6HD20/Whats-App-Image-2026-09-21-at-11-36-49-AM.jpg` — `KØKKEN & BAD` · `Specialdesign` (`Skræddersyede vådrum og køkkenløsninger med præcision i hver samling.`)
+   - `https://i.ibb.co/hJk3P2Dn/Whats-App-Image-2026-09-21-at-11-37-06-AM.jpg` — `INDRETNING & LYS` · `Frederiksberg` (`Arkitektonisk belysning og bløde tekstiler skaber ro og balance.`)
+   - `https://i.ibb.co/sxsFDkx/Whats-App-Image-2026-09-21-at-11-53-43-AM.jpg` — `SNEDKERDETALJER` · `Charlottenlund` (`Specialfremstillede opbevaringsløsninger integreret i boligens arkitektur.`)
+   - `https://i.ibb.co/BH1QZMP2/Whats-App-Image-2026-09-21-at-11-59-04-AM.jpg` — `HELHEDSLØSNING` · `Vedbæk` (`Fra første plantegning til nøglefærdigt og indflytningsklart hjem.`)
+   - `https://i.ibb.co/MyL53gqz/Whats-App-Image-2026-09-24-at-2-21-03-PM.jpg` — `MATERIALEPALET` · `Hellerup Showroom` (`Taktile overflader i træ, sten og tekstil udvalgt til private bygherrer.`)
+   - `https://i.ibb.co/R46fmqhd/Whats-App-Image-2026-09-24-at-2-21-29-PM.jpg` — `ARKITEKTONISK SPARRING` · `Nordsjælland` (`Tæt koordinering mellem bygherre, arkitekt og håndværkere.`)
+   - `https://i.ibb.co/DHv8pZdB/IMG-2719-768x1024-jpg.jpg` — `RUM & BALANCE` · `København` (`Æstetiske proportioner og gennemførte detaljer i hvert eneste rum.`)
+   - Automatic active caption beneath the center card + fullscreen blurred dark Lightbox modal (`fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl`) on click with smooth scale/blur open & close transitions, top-right `✕`, and backdrop/`Esc` close.
+
+---
+
+### 9. "OM NATALIE" SECTION: PRECISION ALIGNMENT + CORNER-EXPAND PORTRAIT
+
+- Balanced 12-column grid (`max-w-6xl mx-auto px-6 sm:px-8 md:px-14 py-24 md:py-36 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 lg:gap-16 items-stretch`).
+- **Natalie Lopez Portrait (`lg:col-span-5`):**
+  - Image URL: `https://i.ibb.co/2Yfyzf1G/Whats-App-Image-2026-09-07-at-3-53-38-PM.jpg` (`referrerPolicy="no-referrer"`).
+  - Container (`w-full max-w-md mx-auto lg:max-w-none aspect-[4/5] rounded-2xl overflow-hidden relative bg-[#E3E1D9]`) animates with GSAP `ScrollTrigger` corner-expand reveal (`clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)` to `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`, `scrub: 0.8`) while inner `<img>` (`object-cover object-top`) scales from `1.18` to `1.0`.
+- **Aligned Bio & 3 Expertise Pillars (`lg:col-span-7 flex flex-col justify-between text-left`):**
+  - Top: Baseline-animated heading (`Om Natalie` / `About Natalie`) + 2 bio paragraphs.
+  - Bottom (`mt-10 pt-8 border-t border-[#120F17]/12 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 items-end`):
+    - **Æstetik / Aesthetics:** `Detaljer med omtanke` / `Thoughtful details`
+    - **Håndværk / Craftsmanship:** `Øje for detaljer` / `Eye for detail`
+    - **Helhed / Wholeness:** `Samlede løsninger` / `Cohesive solutions`
+
+---
+
+### 10. "SHOWROOM, STRANDVEJEN" (`BOOK ET BESØG →`) WITH DEDICATED SHOWROOM IMAGE
+
+Build the **Showroom, Strandvejen** section as an editorial 2-column showcase (`max-w-6xl mx-auto px-6 sm:px-8 md:px-14 py-24 md:py-32 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 items-center`):
+- **Left Column — Editorial Showroom Details (`lg:col-span-6 text-left`):**
+  - Baseline-animated heading: `Showroom, Strandvejen`
+  - Subheading: `Et sted skabt til beslutninger` (DA) / `A space made for decisions` (EN)
+  - Body text:
+    - **DA:** `Fra natursten og træ til armaturer og tekstiler. Showroomet samler materialer og løsninger, så du kan opleve helheden, før projektet bliver til virkelighed.`
+    - **EN:** `From natural stone and wood to fixtures and textiles. The showroom brings materials and solutions together so you can experience the whole before the project becomes reality.`
+  - Interactive CTA Link/Button: `Book et besøg →` (DA) / `Book a visit →` (EN) with smooth arrow glide hover micro-interaction.
+- **Right Column — Hosted Showroom Feature Image (`lg:col-span-6`):**
+  - Render the provided Showroom image inside a refined architectural frame (`w-full aspect-[4/3] rounded-2xl overflow-hidden relative bg-[#E3E1D9] shadow-sm`):
+    - **Image URL:** `https://i.ibb.co/bg8sj870/4813c938-d72e-4d3b-8fa0-d167ebce350b.webp`
+    - Include `referrerPolicy="no-referrer"`, `alt="Showroom Strandvejen - Natalie Lopez"`, and apply the GSAP `ScrollTrigger` corner-expand mask reveal (`clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)` to `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`) with smooth subtle scale (`1.12` → `1.0`).
+
+---
+
+### 11. "LEVERANDØRER / SUPPLIERS" SECTION USING REACT BITS `LogoLoop`
+
+Implement `components/ui/LogoLoop.jsx` and `components/ui/LogoLoop.css` with two opposing horizontal `LogoLoop` tracks (`direction="left"` at `speed={48}` and `direction="right"` at `speed={42}`, `fadeOut`, `fadeOutWidth={0.14}`, `hoverSpeed={0}`, `scaleOnHover`, `draggable`) showcasing all 33 luxury interior brands (`Poliform`, `United Alabaster`, `St. Leo`, `Trækompagniet`, `Toni Copenhagen`, `Dornbracht`, `Prado`, `Atelier Luxus`, `Anker&Co`, `Møller & Rothe`, `Handcrafted Interior`, `Brandt Cph`, `Gaggenau`, `Antonio Lupi`, `Vivaporte`, `Agape`, `Bomma`, `Gallotti & Radice`, `Flos`, `CTO Lighting`, `Jab`, `Massimo`, `Dedar`, `Nobilis`, `Borderstone`, `SolidStudio`, `Florim`, `Porcelanosa`, `Kronos`, `CasaCeramic`, `Lithoss`, `Ochre`, `J. Adams & Co`).
+
+---
+
+### 12. COMPLETE BILINGUAL CONTENT DICTIONARY (`DA` & `EN` — IDENTICAL ALIGNMENT)
+
+Ensure instantaneous text switching with identical text alignment across all sections:
+
+1. **Ydelser / Services:**
+   - Heading: `Ydelser` | `Services`
+   - Subheading: `Vælg den løsning, der passer til dit projekt` | `Choose the solution that fits your project`
+   - `01 Renovering` / `01 Renovation`: `En renovering består af hundredevis af beslutninger. Jeg hjælper dig med at skabe overblik, træffe de rigtige valg og sikre, at visionen bevares hele vejen fra idé til færdigt hjem.` | `A renovation involves hundreds of decisions. I help you create clarity, make the right choices, and ensure your vision is preserved all the way from idea to finished home.`
+   - `02 Æstetisk rådgivning` / `02 Aesthetic Advisory`: `De bedste løsninger opstår, når alle valg spiller sammen. Jeg hjælper med at skabe en rød tråd på tværs af materialer, detaljer og rum.` | `The best solutions emerge when every choice works together. I help create a cohesive thread across materials, details, and rooms.`
+   - `03 Sparring` / `03 Design Sparring`: `Har du egne håndværkere? Jeg bidrager med æstetisk sparring og hjælper dig med at træffe de rigtige beslutninger undervejs.` | `Do you have your own craftsmen? I provide aesthetic sparring and help you make the right decisions along the way.`
+
+2. **Sådan arbejder vi / How We Work:**
+   - Heading: `Sådan arbejder vi` | `How We Work`
+   - Subheading: `En gennemtænkt proces fra start til slut` | `A thoughtful process from start to finish`
+   - `01 Afklaring` / `01 Clarification`: `Vi definerer ønsker, behov og rammer for projektet.` | `We define wishes, needs, and the framework for the project.`
+   - `02 Retning` / `02 Direction`: `Materialer, løsninger og detaljer udvælges med fokus på en samlet vision.` | `Materials, solutions, and details are selected with focus on a unified vision.`
+   - `03 Realisering` / `03 Realization`: `Projektet koordineres, og de mange beslutninger omsættes til virkelighed.` | `The project is coordinated, and the many decisions are turned into reality.`
+   - `04 Indretning` / `04 Interior Styling`: `Møbler, belysning, gardiner og tekstiler udvælges, så hjemmet hænger sammen som en helhed.` | `Furniture, lighting, curtains, and textiles are curated so the home comes together as a whole.`
+   - `05 Overdragelse` / `05 Handover`: `Et færdigt hjem, hvor helheden er tænkt ind i hver eneste detalje.` | `A finished home where cohesion is thoughtfully built into every single detail.`
+
+3. **Om Natalie / About Natalie:**
+   - DA: `Min interesse for renovering opstod gennem egne projekter og en fascination af, hvordan de rigtige valg kan forandre et hjem. Jeg oplevede, hvor svært det kan være at skabe overblik, når design, håndværkere og utallige beslutninger skal gå op i en højere enhed.` + `Gennem de seneste seks år har jeg arbejdet med renoveringer for private boligejere og hjulpet med at skabe sammenhæng mellem æstetik, håndværk og udførelse. Mit mål er altid det samme: at skabe overblik, træffe de rigtige valg og føre en vision sikkert fra idé til færdigt hjem.`
+   - EN: `My interest in renovation grew out of my own projects and a fascination with how the right choices can transform a home. I experienced firsthand how challenging it can be to maintain clarity when design, craftsmen, and countless decisions need to come together into a unified whole.` + `Over the past six years, I have worked on renovations for private homeowners, helping bridge aesthetics, craftsmanship, and execution. My goal is always the same: to create overview, make the right choices, and guide a vision safely from idea to finished home.`
+
+4. **Reviews:**
+   - Featured Quote (`Ellen & Emil`):
+     - DA: `"Natalie har været fantastisk fra start til slut. Vi giver hende vores varmeste anbefalinger og vil uden tvivl benytte hende igen. Vi har en travl hverdag og vores byggeprojekt virkede uoverskueligt indtil Natalie kom ind og skabte klarhed og struktur. Med sin store erfaring formåede hun at styre hele processen, fra plantegning til færdiggørelse, med overblik og præcision. Hendes passion for projekterne er tydelig, og hun har et enestående øje for både funktionelle og æstetiske løsninger."`
+     - EN: `"Natalie has been fantastic from start to finish. We give her our warmest recommendations and will undoubtedly work with her again. We have busy everyday lives and our building project felt overwhelming until Natalie stepped in and created clarity and structure. With her vast experience, she managed to guide the entire process, from floor plan to completion, with overview and precision. Her passion for her projects is unmistakable, and she has an exceptional eye for both functional and aesthetic solutions."`
+   - Cards:
+     - **Saschah ♡**: `Tusinde tak for din kæmpe hjælp under renoveringen, du er den bedste!` | `Thank you so much for your immense help during the renovation, you are the best!`
+     - **Stephanie ♡**: `Den bedste rådgivning og samarbejde` | `The very best advisory and collaboration`
+     - **Pouline ♡**: `Tak for et trygt og altid 100% transparent samarbejde. Det er afgørende, når man står midt i et stort projekt og skal træffe mange beslutninger.` | `Thank you for a reassuring and always 100% transparent collaboration. That is crucial when you are in the middle of a large project with many decisions to make.`
+
+5. **Næste skridt / Next Step & Footer:**
+   - Heading: `Næste skridt` | `Next Step`
+   - Subheading: `Lad os tale om dit projekt` | `Let's talk about your project`
+   - Text: `Alle projekter starter med en god dialog. Fortæl mig om dine planer, så tager vi den derfra.` | `Every project begins with a good conversation. Tell me about your plans, and we will take it from there.`
+   - CTA: `Book en samtale` | `Book a consultation`
+   - Footer Info: `Natalielopezdesign` · `kontakt@natalielopez.dk` · `Strandvejen 153, 2900 Hellerup, Denmark` · `Natalie Lopez ApS · CVR 45 13 53 30` · Legal links (`Cookiepolitik / Cookie Policy`, `Persondatapolitik / Privacy Policy`, `Handelsbetingelser / Terms & Conditions`).
